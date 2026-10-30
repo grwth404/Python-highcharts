@@ -21,6 +21,16 @@ class BaseOptions(object):
     def __jsonable__(self):
         return self.__dict__
 
+    def __validate_options__(self, k, v, ov):
+        if ov == NotImplemented: 
+            raise OptionTypeError("Option Type Currently Not Supported: %s" % k)
+        if isinstance(v,dict) and isinstance(ov,dict):
+            keys = v.keys()
+            if len(keys) > 1: 
+                raise NotImplementedError
+            return isinstance(v[keys[0]],ov[keys[0]])
+        return isinstance(v, ov) 
+
     def update_dict(self, **kwargs):
         for k, v in kwargs.items(): 
             if k in self.ALLOWED_OPTIONS:
