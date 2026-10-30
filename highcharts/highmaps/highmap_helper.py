@@ -28,13 +28,6 @@ def jsonp_loader(url, prefix_regex=r'^(.*\()', suffix_regex=r'(\);)$', sub_d=Non
     # replace all the redundant info with sub_by 
     if sub_d:
         result = re.sub(sub_d, sub_by, result)
-
-    prefix = re.search(prefix_regex, result).group()
-    suffix = re.search(suffix_regex, result).group()
-    if result.startswith(prefix) and result.endswith(suffix):
-        result = result[len(prefix):-len(suffix)]
-    return json.loads(result, encoding='utf8', cls=JSONPDecoder)
-
 def js_map_loader(url):
     """Load map data from a .js source. It is designed for using highcharts' map collection:
     https://code.highcharts.com/mapdata/. Map data from other sources are not guaranteed
