@@ -8,7 +8,6 @@ python-highcharts supports Python 2.7/3.4+ and is available on PyPI. To install:
 ```
 pip install python-highcharts
 ```
-
 ---------------------------------------------------------------------------------------------------------------
 # Highcharts/Highstock
 
@@ -111,7 +110,6 @@ chart.add_data_set(data, 'scatter', 'Outlier',
 
 chart.add_drilldown_data_set(data_2, 'column', 'Chrome', name='Chrome')
 ```
-
 
 ## Example Usage
 
