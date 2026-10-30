@@ -8,17 +8,17 @@ from highcharts.highmaps.highmap_helper import jsonp_loader, js_map_loader, geoj
 
 H = Highmap()
 options = {
-        'title' : {
-                'text' : 'Highmaps from geojson with multiple geometry types'
-            },
+    'title' : {
+            'text' : 'Highmaps from geojson with multiple geometry types'
+        },
 
-        'mapNavigation': {
-            'enabled': True,
-            'buttonOptions': {
-                'verticalAlign': 'bottom'
-            }
-            },
-    } 
+    'mapNavigation': {
+        'enabled': True,
+        'buttonOptions': {
+            'verticalAlign': 'bottom'
+        }
+        },
+} 
 
 H.set_dict_options(options)
 

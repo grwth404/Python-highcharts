@@ -117,15 +117,15 @@ data = [ # input dataset
 ]
 H.set_dict_options(options) # set options
 H.add_data_set(data, 'map', 'Random data', joinBy=['code_hasc', 'code'], # set dataset
-                states={
-                    'hover': {
-                        'color': '#BADA55'
-                    }
-                },
-                dataLabels={
-                    'enabled': True,
-                    'format': '{point.properties.postal}'
-                })
+    states={
+        'hover': {
+            'color': '#BADA55'
+        }
+    },
+    dataLabels={
+        'enabled': True,
+        'format': '{point.properties.postal}'
+    })
 
 H.set_map_source('http://www.highcharts.com/samples/data/jsonp.php?filename=germany.geo.json&callback=?', True) # set map data from the src (jsonp)
 
