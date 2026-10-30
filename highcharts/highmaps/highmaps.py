@@ -72,11 +72,6 @@ class Highmap(object):
                 'https://code.highcharts.com/maps/6/modules/data.js',
                 'https://code.highcharts.com/maps/6/modules/exporting.js'
             ]
-
-        # set CSS src
-        self.CSSsource = [
-                'https://www.highcharts.com/highslide/highslide.css',
-            ]
         # Set data
         self.data = []
         self.data_temp = []
