@@ -29,6 +29,56 @@ def jsonp_loader(url, prefix_regex=r'^(.*\()', suffix_regex=r'(\);)$', sub_d=Non
     if sub_d:
         result = re.sub(sub_d, sub_by, result)
 
+    prefix = re.search(prefix_regex, result).group()
+    suffix = re.search(suffix_regex, result).group()
+    if result.startswith(prefix) and result.endswith(suffix):
+        result = result[len(prefix):-len(suffix)]
+    return json.loads(result, encoding='utf8', cls=JSONPDecoder)
+
+def js_map_loader(url):
+    """Load map data from a .js source. It is designed for using highcharts' map collection:
+    https://code.highcharts.com/mapdata/. Map data from other sources are not guaranteed
+    """
+
+    hdr = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7'}
+    req = urllib.request.Request(url, headers=hdr)
+    page = urlopen(req)
+    result = page.read().decode('utf-8')
+    result = result[len(re.search(r'^.* = ', result).group()):]
+
+    return json.loads(result)
+
+def geojson_handler(geojson, hType='map'):
+    """Restructure a GeoJSON object in preparation to be added directly by add_map_data or add_data_set methods. 
+    The geojson will be broken down to fit a specific Highcharts (highmaps) type, either map, mapline or mappoint. 
+    Meta data in GeoJSON's properties object will be copied directly over to object['properties']
+    1. geojson is the map data (GeoJSON) to be converted
+    2. hType is the type of highmap types. "map" will return GeoJSON polygons and multipolygons. 
+        "mapline" will return GeoJSON linestrings and multilinestrings. 
+        "mappoint" will return GeoJSON points and multipoints.
+        default: "map"
+    """
+
+    hType_dict = {
+    'map': ['polygon', 'multipolygon'],
+    'mapline': ['linestring', 'multilinestring'],
+    'mappoint': ['point', 'multipoint'],    
+    }
+
+
+    oldlist = [x for x in geojson['features'] if x['geometry']['type'].lower() in hType_dict[hType]]
+    newlist = []
+    for each_dict in oldlist:
+        geojson_type = each_dict['geometry']['type'].lower()
+
+        if hType == 'mapline':
+            newlist.append(
+            {'name': each_dict['properties'].get('name', None), 
+             'path': _coordinates_to_path(each_dict['geometry']['coordinates'], hType, geojson_type),
+             'properties': each_dict['properties'],
+             }
+            )
+        elif hType == 'map':
             newlist.append(
             {'name': each_dict['properties']['name'], 
              'path': _coordinates_to_path(each_dict['geometry']['coordinates'], hType, geojson_type),
